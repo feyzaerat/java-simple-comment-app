@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -29,7 +30,7 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(name = "birth_date")
-    private String birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "img_url")
     private String imgURL;
