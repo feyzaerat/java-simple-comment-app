@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import socialMedia.comment.models.Comment;
 import socialMedia.comment.models.Post;
+import socialMedia.comment.models.Role;
 import socialMedia.comment.services.dtos.responses.BaseResponse;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +23,9 @@ public class GetUserResponse extends BaseResponse {
     private String imgURL;
     private Post postList;
     private Comment commentList;
+    private boolean accountNonExpired;
+    private boolean isEnabled;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+    private Set<Role> authorities;
 }
