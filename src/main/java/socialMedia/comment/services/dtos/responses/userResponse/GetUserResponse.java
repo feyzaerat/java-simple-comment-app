@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import socialMedia.comment.models.Comment;
-import socialMedia.comment.models.Post;
+import socialMedia.comment.models.Task;
 import socialMedia.comment.models.Role;
 import socialMedia.comment.services.dtos.responses.BaseResponse;
+import socialMedia.comment.services.dtos.responses.commentResponse.GetCommentListResponse;
+import socialMedia.comment.services.dtos.responses.taskResponse.GetTaskListResponse;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -21,11 +25,8 @@ public class GetUserResponse extends BaseResponse {
     private String password;
     private LocalDate birthDate;
     private String imgURL;
-    private Post postList;
-    private Comment commentList;
-    private boolean accountNonExpired;
-    private boolean isEnabled;
-    private boolean accountNonLocked;
-    private boolean credentialsNonExpired;
-    private Set<Role> authorities;
+    private GetTaskListResponse taskList;
+    private GetCommentListResponse commentList;
+
+
 }

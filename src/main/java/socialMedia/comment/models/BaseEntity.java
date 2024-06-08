@@ -18,11 +18,11 @@ public  abstract class BaseEntity{
 
 
     @CreatedDate
-    @Column(name = "created_at",nullable = false, updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at",nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "is_active", nullable = false)
@@ -30,6 +30,14 @@ public  abstract class BaseEntity{
 
     @Column(name = "rank",nullable = false)
     private int rank = 0;
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
 
 }

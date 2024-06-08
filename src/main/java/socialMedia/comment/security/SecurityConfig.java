@@ -1,18 +1,11 @@
 package socialMedia.comment.security;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,42 +13,31 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+    private static final String[] AUTH_WHITE_LIST = {
+            "/v3/api-docs/**",
+            "swagger-ui.html",
+            "/swagger-ui/**",
+            "/",
+            "index.html",
+            "/images/**",
+            "/css/**",
+            "/js/**",
+            "/contactMessages/save",
+            "/auth/login",
+            "/api/login",
+            "/**"
+    };
 
     @Bean
-    public UserDetailsService users(){
-        UserDetails user1 = User.builder()
-                .username("fsk")
-                .password("pass")
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("FeyzaErat")
-                .password("pass")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1,admin);
-
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity security) throws Exception{
-        security
-                .headers(x -> x.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+    public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
+        security.headers(x -> x.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(x ->
-                        x.requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/private/**").authenticated()
-                )
+                .authorizeHttpRequests(x -> x
+                        .requestMatchers(AUTH_WHITE_LIST).permitAll()
 
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults());
-
-
+                ).formLogin(AbstractHttpConfigurer::disable);
         return security.build();
+
+
     }
 }

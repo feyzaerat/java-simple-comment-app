@@ -1,4 +1,4 @@
-package socialMedia.comment.services.dtos.responses.postResponse;
+package socialMedia.comment.services.dtos.responses.taskResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +9,10 @@ import socialMedia.comment.services.dtos.responses.BaseResponse;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class GetPostResponse extends BaseResponse {
+public class GetTaskResponse extends BaseResponse {
     private int id;
     private String title;
     private String content;
-    private User user;
+    private int userId;
 
 }

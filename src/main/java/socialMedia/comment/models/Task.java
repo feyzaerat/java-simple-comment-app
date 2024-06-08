@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "posts")
 
-public class Post extends BaseEntity{
+public class Task extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Post extends BaseEntity{
     @Column(name = "content", nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

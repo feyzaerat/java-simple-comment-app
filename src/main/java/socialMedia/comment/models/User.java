@@ -1,5 +1,6 @@
 package socialMedia.comment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,16 +23,16 @@ import java.util.Set;
 public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "birth_date")
@@ -47,15 +48,17 @@ public class User extends BaseEntity implements UserDetails {
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> postList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Task> taskList;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
 
