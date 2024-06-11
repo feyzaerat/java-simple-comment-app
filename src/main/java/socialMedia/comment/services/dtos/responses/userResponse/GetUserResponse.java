@@ -22,11 +22,10 @@ public class GetUserResponse extends BaseResponse {
     private int id;
     private String username;
     private String email;
-    private String password;
+
     private LocalDate birthDate;
     private String imgURL;
-    private GetTaskListResponse taskList;
-    private GetCommentListResponse commentList;
+
 
 
 }

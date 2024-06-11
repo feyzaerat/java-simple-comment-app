@@ -23,6 +23,12 @@ public class CommentsController {
         return this.commentService.getAllComments();
     }
 
+    @GetMapping("/getAllCommentsByTaskId/{taskId}")
+    public List <GetCommentListResponse> getAllCommentsByTaskId(@PathVariable int taskId ){
+        return this.commentService.getAllCommentsByTaskId(taskId);
+
+    }
+
     @GetMapping("/{id}")
     public GetCommentResponse getById(@PathVariable int id) {
         return this.commentService.getByCommentId(id);

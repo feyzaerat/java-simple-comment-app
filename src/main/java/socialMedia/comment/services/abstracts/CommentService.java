@@ -14,6 +14,8 @@ public interface CommentService {
     List<GetCommentListResponse> getAllComments();
     GetCommentResponse getByCommentId(int id);
 
+    List<GetCommentListResponse> getAllCommentsByTaskId(int taskId);
+
     void addComment(AddCommentRequest request);
     void updateComment(UpdateCommentRequest request);
     void deleteComment(int id);

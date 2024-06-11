@@ -15,6 +15,7 @@ public class AddCommentRequest {
     @NotNull(message = "Comment cannot be Null !!")
     @NotBlank(message = "You have to any entry !!")
     private String content;
-    private int userId;
+    private String userName;
+    private int taskId;
 
 }

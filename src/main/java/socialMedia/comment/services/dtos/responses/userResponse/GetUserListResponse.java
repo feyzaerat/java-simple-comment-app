@@ -16,9 +16,8 @@ public class GetUserListResponse extends BaseResponse {
     private int id;
     private String username;
     private String email;
-    private String password;
+
     private LocalDate birthDate;
     private String imgURL;
-    private Task taskList;
-    private Comment commentList;
+
 }

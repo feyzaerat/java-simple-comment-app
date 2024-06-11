@@ -2,9 +2,13 @@ package socialMedia.comment.services.conretes;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import socialMedia.comment.core.exceptions.NotFoundException;
 import socialMedia.comment.core.utilities.mappers.ModelMapperService;
 import socialMedia.comment.models.Comment;
+import socialMedia.comment.models.Task;
+import socialMedia.comment.models.User;
 import socialMedia.comment.repositories.CommentRepository;
+import socialMedia.comment.repositories.TaskRepository;
 import socialMedia.comment.repositories.UserRepository;
 import socialMedia.comment.services.abstracts.CommentService;
 import socialMedia.comment.services.dtos.requests.commentRequest.AddCommentRequest;
@@ -18,7 +22,9 @@ import java.util.List;
 @Service
 public class CommentManager implements CommentService {
     private final CommentRepository commentRepository;
+    private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+
     private ModelMapperService modelMapperService;
 
 
@@ -32,10 +38,19 @@ public class CommentManager implements CommentService {
 
     @Override
     public GetCommentResponse getByCommentId(int id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment Not Found"));
         GetCommentResponse response = modelMapperService.forResponse().map(comment, GetCommentResponse.class);
 
         return response;
+    }
+
+    @Override
+    public List<GetCommentListResponse> getAllCommentsByTaskId(int taskId){
+        Task task = this.taskRepository.findById(taskId).orElseThrow(() -> new NotFoundException("Task Not Found"));
+        List<Comment> comments = task.getCommentList();
+
+        List<GetCommentListResponse> responses = comments.stream().map(comment -> this.modelMapperService.forResponse().map(comment, GetCommentListResponse.class)).toList();
+        return responses;
     }
 
     @Override
@@ -45,21 +60,31 @@ public class CommentManager implements CommentService {
 
         comment.setIsActive(1);
         comment.setRank(0);
+
+        Task task = this.taskRepository.findById(request.getTaskId()).orElseThrow(() -> new NotFoundException("Task Not Found"));
+        User user = this.userRepository.findByUsername(request.getUserName()).orElseThrow(() -> new NotFoundException("User Not Found"));
+
+        comment.setTask(task);
+        comment.setUser(user);
+
         commentRepository.save(comment);
 
     }
 
     @Override
     public void updateComment(UpdateCommentRequest request) {
-        commentRepository.findById(request.getId()).orElseThrow(() -> new RuntimeException());
-        Comment comment = this.modelMapperService.forRequest().map(request, Comment.class);
+        Comment comment = commentRepository.findById(request.getId()).orElseThrow(() -> new NotFoundException("Comment Not Found"));
+        this.modelMapperService.forRequest().map(request, comment);
+
 
         commentRepository.save(comment);
     }
 
     @Override
     public void deleteComment(int id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment Not Found"));
         this.commentRepository.delete(comment);
     }
+
+
 }

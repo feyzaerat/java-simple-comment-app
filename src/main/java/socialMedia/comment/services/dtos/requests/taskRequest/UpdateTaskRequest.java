@@ -11,7 +11,7 @@ public class UpdateTaskRequest{
     private Integer id;
     private String title;
     private String content;
-    private int userId;
+
 
 
 }
