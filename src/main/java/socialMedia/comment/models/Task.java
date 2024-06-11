@@ -32,7 +32,7 @@ public class Task extends BaseEntity{
     private User user;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
 }

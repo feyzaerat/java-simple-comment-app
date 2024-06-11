@@ -10,6 +10,6 @@ import socialMedia.comment.services.dtos.requests.AddBaseRequest;
 public class AddTaskRequest extends AddBaseRequest {
     private String title;
     private String content;
-    private String userName;
+    private String username;
 
 }

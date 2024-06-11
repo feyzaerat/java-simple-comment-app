@@ -42,7 +42,7 @@ public class TaskManager implements TaskService {
     @Override
     public void addTask(AddTaskRequest request) {
         Task task = this.modelMapperService.forRequest().map(request, Task.class);
-        User user = this.userRepository.findByUsername(request.getUserName()).orElseThrow(() -> new NotFoundException("User Not Found"));
+        User user = this.userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new NotFoundException("User Not Found"));
 
         task.setId(null);
         task.setUser(user);

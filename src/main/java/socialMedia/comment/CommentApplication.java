@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import socialMedia.comment.models.Role;
-import socialMedia.comment.services.conretes.AuthManager;
+import socialMedia.comment.services.abstracts.AuthService;
 import socialMedia.comment.services.dtos.requests.userRequest.AddUserRequest;
 
 import java.util.Set;
@@ -14,15 +14,16 @@ import java.util.Set;
 @SpringBootApplication
 public class CommentApplication implements CommandLineRunner {
 
-	private final AuthManager authManager;
+	private final AuthService authManager;
+
+    public CommentApplication( AuthService authManager) {
+        this.authManager = authManager;
+    }
 
 
-	@Bean
+    @Bean
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
-	}
-	public CommentApplication(AuthManager authManager){
-		this.authManager = authManager;
 	}
 
 	public static void main(String[] args) {
@@ -51,10 +52,10 @@ public class CommentApplication implements CommandLineRunner {
 				.build();
 
 		if(authManager.getByUsername(requestAdmin.getUsername()).isEmpty()){
-			authManager.register(requestAdmin);
+			authManager.createUser(requestAdmin);
 		}
 		if(authManager.getByUsername(requestUser.getUsername()).isEmpty()){
-			authManager.register(requestUser);
+			authManager.createUser(requestUser);
 		}
 	}
 

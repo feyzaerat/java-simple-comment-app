@@ -62,7 +62,7 @@ public class CommentManager implements CommentService {
         comment.setRank(0);
 
         Task task = this.taskRepository.findById(request.getTaskId()).orElseThrow(() -> new NotFoundException("Task Not Found"));
-        User user = this.userRepository.findByUsername(request.getUserName()).orElseThrow(() -> new NotFoundException("User Not Found"));
+        User user = this.userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new NotFoundException("User Not Found"));
 
         comment.setTask(task);
         comment.setUser(user);

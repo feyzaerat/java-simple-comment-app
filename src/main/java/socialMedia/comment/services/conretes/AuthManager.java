@@ -1,44 +1,87 @@
 package socialMedia.comment.services.conretes;
 
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import socialMedia.comment.core.utilities.mappers.ModelMapperService;
-import socialMedia.comment.models.Comment;
+import socialMedia.comment.core.exceptions.InvalidPasswordException;
+import socialMedia.comment.core.exceptions.NotFoundException;
+import socialMedia.comment.models.Role;
 import socialMedia.comment.models.User;
 import socialMedia.comment.repositories.UserRepository;
 import socialMedia.comment.services.abstracts.AuthService;
+import socialMedia.comment.services.dtos.requests.authRequests.AuthRequest;
+import socialMedia.comment.services.dtos.requests.authRequests.SignUpRequest;
 import socialMedia.comment.services.dtos.requests.userRequest.AddUserRequest;
-import socialMedia.comment.services.dtos.requests.userRequest.LoginRequest;
-import socialMedia.comment.services.dtos.responses.commentResponse.GetCommentResponse;
-import socialMedia.comment.services.dtos.responses.userResponse.GetUserResponse;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Service
+@AllArgsConstructor
+@Slf4j
 
 public class AuthManager implements AuthService {
 
     private final UserRepository userRepository;
-    private ModelMapperService modelMapperService;
-
-
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public AuthManager(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
-    public Optional<User> getByUsername(String username){
+    public Optional<User> getByUsername(String username) {
+
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public User register(AddUserRequest request){
+    public User signUp(SignUpRequest request) throws Exception {
+
+        User newUser = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail())
+                .accountNonExpired(true)
+                .isEnabled(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .authorities(Set.of(Role.ROLE_USER))
+
+                .build();
+
+        return this.userRepository.save(newUser);
+    }
+    @Override
+    public String signIn(AuthRequest request) {
+        Optional<User> user = this.userRepository.findByUsername(request.username());
+        if (user.isEmpty()) {
+            throw new NotFoundException("User Not Found !");
+        }
+        if (!passwordEncoder.matches(request.password(), user.get().getPassword())) {
+            throw new InvalidPasswordException("Invalid Password");
+        }
+
+        return generateToken(request);
+    }
+    @Override
+    public String generateToken(AuthRequest request) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(request.username());
+        }
+
+        log.info("Invalid username: " + request.username());
+        throw new UsernameNotFoundException("Invalid username: " + request.username());
+    }
+
+    @Override
+    public User createUser(AddUserRequest request){
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -49,22 +92,13 @@ public class AuthManager implements AuthService {
                 .isEnabled(true)
 
                 .credentialsNonExpired(true)
-            .build();
+                .build();
         user.setIsActive(1);
         user.setRank(0);
 
         return userRepository.save(user);
     }
-    @Override
-    public String login(LoginRequest loginRequest){
-        Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
-
-        if(user.isEmpty()){
-            throw new EntityNotFoundException("User Not Found !!!");
-        }
-        if(!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())){
-            throw new BadCredentialsException("Invalid password");
-        }
-        return loginRequest.getUsername();
-    }
 }
+
+
+
