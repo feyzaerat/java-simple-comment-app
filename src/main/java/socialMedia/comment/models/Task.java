@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "posts")
 
-public class Task extends BaseEntity{
+public class Task{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "title", nullable = false)
     private String title;

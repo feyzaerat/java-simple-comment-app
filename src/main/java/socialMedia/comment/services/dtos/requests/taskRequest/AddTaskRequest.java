@@ -1,4 +1,15 @@
 package socialMedia.comment.services.dtos.requests.taskRequest;
 
-public class AddTaskRequest {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import socialMedia.comment.services.dtos.requests.AddBaseRequest;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddTaskRequest extends AddBaseRequest {
+    private String title;
+    private String content;
+    private int userId;
+
 }

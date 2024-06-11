@@ -25,10 +25,10 @@ public  abstract class BaseEntity{
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active")
     private int isActive;
 
-    @Column(name = "rank",nullable = false)
+    @Column(name = "rank")
     private int rank = 0;
     @PrePersist
     public void prePersist(){

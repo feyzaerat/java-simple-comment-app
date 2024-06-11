@@ -56,7 +56,7 @@ public class AuthManager implements AuthService {
         return userRepository.save(user);
     }
     @Override
-    public void login(LoginRequest loginRequest){
+    public String login(LoginRequest loginRequest){
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 
         if(user.isEmpty()){
@@ -65,5 +65,6 @@ public class AuthManager implements AuthService {
         if(!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())){
             throw new BadCredentialsException("Invalid password");
         }
+        return loginRequest.getUsername();
     }
 }

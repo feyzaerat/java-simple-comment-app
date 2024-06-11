@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import socialMedia.comment.core.utilities.mappers.ModelMapperService;
 import socialMedia.comment.models.Comment;
-import socialMedia.comment.models.User;
 import socialMedia.comment.repositories.CommentRepository;
 import socialMedia.comment.repositories.UserRepository;
 import socialMedia.comment.services.abstracts.CommentService;
@@ -14,7 +13,6 @@ import socialMedia.comment.services.dtos.responses.commentResponse.GetCommentLis
 import socialMedia.comment.services.dtos.responses.commentResponse.GetCommentResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service

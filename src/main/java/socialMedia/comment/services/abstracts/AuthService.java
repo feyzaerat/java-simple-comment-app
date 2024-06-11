@@ -14,6 +14,6 @@ public interface AuthService {
 
 
     Optional<User> getByUsername(String username);
-    void login(LoginRequest loginRequest);
+    String login(LoginRequest loginRequest);
     User register(AddUserRequest request);
 }
