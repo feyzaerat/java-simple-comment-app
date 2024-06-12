@@ -17,10 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @Builder
-
-
 @Table(name = "users")
-
 public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,16 +50,12 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities;
 
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Task> taskList;
-
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Task> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -72,8 +65,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired(){
-
+    public boolean isAccountNonExpired() {
         return this.accountNonExpired;
     }
 
@@ -90,5 +82,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.isEnabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", username='" + username + "', email='" + email + "', birthDate=" + birthDate + ", imgURL='" + imgURL + "', accountNonExpired=" + accountNonExpired + ", isEnabled=" + isEnabled + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired=" + credentialsNonExpired + "}";
     }
 }

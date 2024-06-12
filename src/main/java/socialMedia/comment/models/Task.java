@@ -12,10 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "posts")
-
-public class Task extends BaseEntity{
-
+@Table(name = "tasks")
+public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,12 +25,17 @@ public class Task extends BaseEntity{
     @Column(name = "content", nullable = false)
     private String content;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnore
     @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
+    @Override
+    public String toString() {
+        return "Task{id=" + id + ", title='" + title + "', content='" + content + "'}";
+    }
 }

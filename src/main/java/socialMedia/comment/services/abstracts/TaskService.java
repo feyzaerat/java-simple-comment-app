@@ -1,5 +1,6 @@
 package socialMedia.comment.services.abstracts;
 
+import socialMedia.comment.models.Task;
 import socialMedia.comment.services.dtos.requests.taskRequest.AddTaskRequest;
 import socialMedia.comment.services.dtos.requests.taskRequest.UpdateTaskRequest;
 import socialMedia.comment.services.dtos.responses.taskResponse.GetTaskListResponse;
@@ -14,4 +15,5 @@ public interface TaskService {
     void addTask(AddTaskRequest request);
     void updateTask(UpdateTaskRequest request);
     void deleteTask(int id);
+
 }

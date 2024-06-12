@@ -35,7 +35,7 @@ public class TasksController {
         this.taskService.addTask(addTaskRequest);
     }
 
-    @PutMapping
+    @PatchMapping
     public void updateTask(@RequestBody @Valid UpdateTaskRequest updateTaskRequest){
         this.taskService.updateTask(updateTaskRequest);
     }
